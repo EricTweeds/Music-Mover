@@ -60,7 +60,10 @@ class App(QMainWindow):
         textboxInValue = self.textboxIn.text()
         textboxOutValue = self.textboxOut.text()
         array = []
-        print(fileGetter(textboxInValue,array))
+        fileGetter(textboxInValue,array)
+        print (array)
+        fileTransfer(array,textboxOutValue,videos)
+
 
 
 
@@ -78,6 +81,23 @@ def fileGetter(cfolder, files):
         else:
             files.append(item)
     return files
+
+def fileTransfer (array, fout, includeVids):
+    for item in array:
+        if ".m4a" in item: #TODO: add other audio types such as mp3
+            try:
+                shutil.copy(item, fout)
+            except OSError as err:
+                print("OS error: {0}".format(err))
+
+        elif ".m4v" in item and includeVids: #TODO: add other video types such as mp4
+             try:
+                shutil.copy(item, fout)
+             except OSError as err:
+                print("OS error: {0}".format(err))
+        else:
+            print("Junk file:", item)
+    print ("Complete")
 
 
 if __name__ == '__main__':
