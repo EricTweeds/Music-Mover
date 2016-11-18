@@ -58,6 +58,22 @@ def MusicGetter(inputName,outputName):
     print (count, "songs were moved")
     print ("Complete")
 
+def fileGetter(cfolder, files):
+    """
+    :param cfolder: directory
+    :param files: array[string]
+    :return: array[string]
+    """
+    directory = os.listdir(cfolder)
+    for item in directory:
+        if os.path.isdir(cfolder+"/"+item):
+            fileGetter(cfolder+"/"+item, files)
+        else:
+            files.append(item)
+    return files
+
 if __name__ == '__main__':
-    MusicGetter(inputName, outputName)
+    #MusicGetter(inputName, outputName)
+    array = []
+    print(fileGetter(inputName, array))
 

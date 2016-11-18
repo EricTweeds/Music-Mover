@@ -59,80 +59,25 @@ class App(QMainWindow):
         videos = self.vidButton.isChecked()
         textboxInValue = self.textboxIn.text()
         textboxOutValue = self.textboxOut.text()
-        musicGetter(textboxInValue,textboxOutValue,videos)
+        array = []
+        print(fileGetter(textboxInValue,array))
 
 
 
-
-
-def musicGetter(inputName,outputName,includeVideos):
+def fileGetter(cfolder, files):
     """
-    :param inputName:  String
-    :param outputName: String
-    :param includeVideos Boolean
-    :return: Void
+    :param cfolder: directory
+    :param files: array[string]
+    :return: array[string]
     """
-    music = os.listdir() #TODO: Make this a user input location
-    records = []
-    singers = []
-    allSongs = []
-    count = 0 #TODO: Make this only count ones successfully copied
-
-    for folder in music:
-        if os.path.isdir(folder) and folder == inputName:
-            artists = os.listdir(folder)
-            for artist in artists:
-                artist = folder + "/" + artist
-                singers.append(artist)
-
-    for artist in singers:
-        if os.path.isdir(artist):
-            albums = os.listdir(artist)
-            for album in albums:
-                album = artist + "/" + album
-                records.append(album)
+    directory = os.listdir(cfolder)
+    for item in directory:
+        item = cfolder+"/"+item
+        if os.path.isdir(item):
+            fileGetter(item, files)
         else:
-            #checks for music file in improper location
-            print("ERROR Unexpected location for file:", artist)
-            allSongs.append(artist)
-
-    for album in records:
-        if os.path.isdir(album):
-            songs = os.listdir(album)
-            #print (songs)
-            for song in songs:
-                song = album + "/" + song
-                allSongs.append(song)
-        else:
-            #checks for music file in improper location
-            print("ERROR Unexpected location for file:", album)
-            allSongs.append(album)
-
-    for song in allSongs:
-        #print (song)
-        if ".m4a" in song:
-            try:
-                shutil.copy(song, outputName) #TODO: Check file type
-            except OSError as err:
-                #Prevents crash when running the code twice in a row
-                print("OS error: {0}".format(err))
-            else:
-                count += 1
-
-        elif includeVideos and ".m4v" in song:
-            try:
-                shutil.copy(song, outputName) #TODO: Check file type
-            except OSError as err:
-                #Prevents crash when running the code twice in a row
-                print("OS error: {0}".format(err))
-            else:
-                count += 1
-
-        else:
-            print(song, "is not a valid file type")
-
-    print (count, "songs were moved")
-    print ("Complete")
+            files.append(item)
+    return files
 
 
 if __name__ == '__main__':
